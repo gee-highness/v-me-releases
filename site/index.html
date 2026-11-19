@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>V-Me Download</title>
+<meta name="description" content="Download V-Me: a life game, film studio and avatar creator for Android, Windows, Linux and macOS. Free, works offline.">
+<meta name="theme-color" content="#f97316">
+<meta property="og:title" content="V-Me: live it, build it, film it">
+<meta property="og:description" content="A life game, film studio and avatar creator. Free for Android, Windows, Linux and macOS.">
+<meta property="og:image" content="img/menu.webp">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+<style>
+  :root {
+    --bg: #0e0907; --panel: #1a1210; --panel-2: #241915; --line: rgb(255 255 255 / .1);
+    --text: #faf6f2; --muted: #b5a89f; --accent: #f97316; --accent-2: #fdba74; --ok: #22c55e;
+    --flame: linear-gradient(135deg, #fbbf24, #f97316 45%, #ea580c 70%, #dc2626);
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --bg: #fff8f1; --panel: #ffffff; --panel-2: #fdf0e4; --line: rgb(60 30 10 / .12); --text: #1c120c; --muted: #6b5d54; --accent-2: #c2410c; color-scheme: light; }
+  }
+  :root[data-theme="light"] { --bg: #fff8f1; --panel: #ffffff; --panel-2: #fdf0e4; --line: rgb(60 30 10 / .12); --text: #1c120c; --muted: #6b5d54; --accent-2: #c2410c; color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: var(--accent-2); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .flame-text { background: linear-gradient(100deg, #fde047, #fb923c 35%, #f97316 55%, #ef4444 85%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .glow { position: fixed; inset: -20%; pointer-events: none; z-index: 0; filter: blur(70px); opacity: .5;
+    background: radial-gradient(35% 30% at 20% 20%, rgb(249 115 22 / .55), transparent 70%), radial-gradient(30% 30% at 85% 15%, rgb(239 68 68 / .4), transparent 70%), radial-gradient(40% 35% at 70% 90%, rgb(251 191 36 / .35), transparent 70%);
+    animation: drift 24s ease-in-out infinite alternate; }
+  :root[data-theme="light"] .glow { opacity: .28; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .glow { opacity: .28; } }
+  @keyframes drift { to { transform: translate3d(4%, -3%, 0) rotate(6deg) scale(1.08); } }
+  .embers { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .embers i { position: absolute; bottom: -10px; width: 6px; height: 6px; border-radius: 50%; background: radial-gradient(circle, #fde047, #f97316 60%, transparent 70%); opacity: 0; animation: ember 8s linear infinite; }
+  @keyframes ember { 10% { opacity: .9; } 100% { transform: translate(40px, -105vh) scale(.3); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .glow, .embers i, .flicker { animation: none !important; } }
+  main, header, footer { position: relative; z-index: 1; }
+
+  header.top { display: flex; align-items: center; gap: 12px; padding: 18px 0; }
+  .logo { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; background: var(--flame); box-shadow: 0 8px 26px rgb(249 115 22 / .4); }
+  .flicker { display: inline-block; animation: flicker 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+  @keyframes flicker { 30% { transform: scale(1.07, .96) rotate(2deg); } 60% { transform: scale(.97, 1.04) rotate(-1deg); } }
+  .brand { font-weight: 900; font-size: 26px; letter-spacing: -.02em; }
+  .top nav { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+  .top nav a { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 10px; font-size: 14px; }
+  .top nav a:hover { color: var(--text); background: var(--line); }
+  .iconbtn { border: 1px solid var(--line); background: var(--panel); color: var(--text); width: 42px; height: 42px; border-radius: 12px; font-size: 18px; cursor: pointer; }
+  @media (max-width: 640px) { .top nav a { display: none; } }
+
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding: 36px 0 56px; }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 12px; } }
+  h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.02; margin: 0 0 16px; letter-spacing: -.03em; font-weight: 900; }
+  .lead { font-size: 19px; color: var(--muted); margin: 0 0 26px; max-width: 34em; }
+  .cta { display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px; border-radius: 18px; background: var(--flame); color: #fff; text-decoration: none; font-weight: 800; font-size: 18px;
+    box-shadow: 0 0 0 1px rgb(251 146 60 / .4), 0 14px 40px rgb(249 115 22 / .4); transition: transform .15s, box-shadow .15s; border: 0; cursor: pointer; }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgb(251 146 60 / .6), 0 18px 48px rgb(249 115 22 / .55); }
+  .cta small { display: block; font-weight: 600; font-size: 13px; opacity: .9; }
+  .cta .ico { font-size: 28px; }
+  .sub { margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .sub a { margin-right: 14px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .badge { padding: 6px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .shot { border-radius: 20px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgb(0 0 0 / .45); background: var(--panel); position: relative; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot.phone { position: absolute; width: 30%; right: -4%; bottom: -12%; border-radius: 22px; border: 3px solid var(--panel-2); }
+  .hero-media { position: relative; margin-bottom: 40px; }
+  main { overflow-x: clip; }
+  @media (max-width: 900px) { .shot.phone { right: 3%; width: 32%; } }
+
+  section { padding: 56px 0; }
+  h2 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 8px; letter-spacing: -.02em; font-weight: 900; }
+  .section-lead { color: var(--muted); margin: 0 0 28px; }
+
+  .platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .plat { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, transform .2s; }
+  .plat.mine { border-color: rgb(249 115 22 / .7); box-shadow: 0 0 0 1px rgb(249 115 22 / .35), 0 10px 30px rgb(249 115 22 / .18); }
+  .plat:hover { transform: translateY(-2px); }
+  .plat h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 20px; }
+  .plat h3 .tag { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--flame); color: #fff; }
+  .plat .note { font-size: 13px; color: var(--muted); }
+  .file { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: background .15s; }
+  .file:hover { background: rgb(249 115 22 / .14); }
+  .file b { font-size: 14px; }
+  .file span { font-size: 12px; color: var(--muted); }
+  .file .dl { margin-left: auto; font-size: 18px; }
+  .soon { font-size: 13px; color: var(--muted); padding: 10px 12px; border-radius: 14px; border: 1px dashed var(--line); }
+  .status { color: var(--muted); font-size: 14px; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .feat { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 18px; }
+  .feat .e { font-size: 30px; }
+  .feat h3 { margin: 8px 0 4px; font-size: 18px; }
+  .feat p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 14px; }
+  .gallery figure { margin: 0; }
+  .gallery figcaption { font-size: 13px; color: var(--muted); padding: 8px 4px 0; }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  details { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+  summary { cursor: pointer; font-weight: 700; }
+  details p, details ol { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+  code { background: var(--panel-2); padding: 2px 6px; border-radius: 6px; font-size: 13px; }
+
+  .notes { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 20px; max-height: 420px; overflow: auto; font-size: 14px; color: var(--muted); }
+  .notes h4 { color: var(--text); margin: 12px 0 6px; }
+  .notes ul { margin: 0; padding-left: 20px; }
+
+  footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 12px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; width: 100%; }
+  :focus-visible { outline: 3px solid #fdba74; outline-offset: 3px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="embers" aria-hidden="true" id="embers"></div>
+
+<header class="wrap top">
+  <div class="logo"><span class="flicker" aria-hidden="true">🔥</span></div>
+  <div class="brand flame-text">V-Me</div>
+  <nav aria-label="Page">
+    <a href="#download">Download</a><a href="#features">Features</a><a href="#install">Install help</a><a href="#notes">What's new</a>
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch dark or light mode">☀️</button>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Live it. Build it.<br><span class="flame-text">Film it. Share it.</span></h1>
+      <p class="lead">V-Me is a life game, a film studio and an avatar creator in one free app. Make a person, furnish a home, keep their needs up, then turn any moment into a video. Works offline.</p>
+      <a class="cta" id="cta" href="#download"><span class="ico" id="cta-ico" aria-hidden="true">⬇</span><span><span id="cta-label">Download V-Me</span><small id="cta-sub">Free · Android, Windows, Linux, macOS</small></span></a>
+      <div class="sub" id="cta-more"><a href="#download">All downloads</a><a id="gh" href="https://github.com/gee-highness/v-me-releases/releases/latest">GitHub releases</a></div>
+      <div class="badges"><span class="badge">🎮 Controller, touch &amp; keyboard</span><span class="badge">🌙 Dark &amp; light mode</span><span class="badge">📴 Works offline</span><span class="badge">🆓 Free</span></div>
+    </div>
+    <div class="hero-media">
+      <div class="shot"><img src="img/menu.webp" width="1366" height="768" alt="The V-Me start menu: Play Life, Create a Person, Build and Design, Film Studio, Stream and Record, Together, Library"></div>
+      <div class="shot phone"><img src="img/phone-light.webp" width="390" height="844" alt="Play Life on a phone in light mode" loading="lazy"></div>
+    </div>
+  </div>
+
+  <section id="download">
+    <div class="wrap">
+      <h2>Download</h2>
+      <p class="section-lead" id="ver">Finding the latest version…</p>
+      <div class="platforms" id="platforms" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>Everything in one app</h2>
+      <p class="section-lead">Pick what you feel like from the start menu.</p>
+      <div class="features">
+        <div class="feat"><div class="e">🏡</div><h3>Play Life</h3><p>A clock you can pause or speed up, eight needs, moods that show on the face, day and night. Sleep, eat, shower, relax.</p></div>
+        <div class="feat"><div class="e">🧍</div><h3>Create a Person</h3><p>Faces, bodies, hair, outfits and accessories, or start from one of the ready-made characters.</p></div>
+        <div class="feat"><div class="e">🛠</div><h3>Build &amp; Design</h3><p>Move, turn, paint and furnish. More than 500 free 3D objects and 900 skies, saved for offline use.</p></div>
+        <div class="feat"><div class="e">🎬</div><h3>Film Studio</h3><p>Scripts, neural voices, camera moves, music, subtitles and transitions. Export a finished video.</p></div>
+        <div class="feat"><div class="e">📡</div><h3>Stream &amp; Record</h3><p>A clean overlay, live mic lip sync, one-tap recording and photos. Every take can be edited later.</p></div>
+        <div class="feat"><div class="e">👥</div><h3>Together</h3><p>Visit friends' homes or host yours, online or on the same Wi-Fi, with voice chat.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="wrap">
+      <h2>Screenshots</h2>
+      <div class="gallery">
+        <figure><div class="shot"><img src="img/play.webp" width="1366" height="768" alt="Play Life: clock, needs and mood over the 3D home" loading="lazy"></div><figcaption>Play Life: needs, mood and time</figcaption></figure>
+        <figure><div class="shot"><img src="img/build.webp" width="1366" height="768" alt="Build mode with the item catalogue" loading="lazy"></div><figcaption>Build &amp; Design</figcaption></figure>
+        <figure><div class="shot"><img src="img/create.webp" width="1366" height="768" alt="Create a Person: the avatar studio" loading="lazy"></div><figcaption>Create a Person</figcaption></figure>
+        <figure><div class="shot"><img src="img/studio.webp" width="1366" height="768" alt="Film Studio" loading="lazy"></div><figcaption>Film Studio</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>Install help</h2>
+      <p class="section-lead">The apps are not signed with a store certificate yet, so your device may ask you to confirm once.</p>
+      <div class="steps">
+        <details open><summary>🤖 Android</summary><ol><li>Download the <code>.apk</code>.</li><li>Open it. If asked, allow your browser or file manager to "install unknown apps".</li><li>Tap Install, then Open.</li></ol></details>
+        <details><summary>🪟 Windows</summary><ol><li>Download the <b>installer</b> (<code>setup.exe</code>), the <b>portable</b> file to run without installing, or the <b>zip</b> (unzip, then run <code>V-Me.exe</code>).</li><li>If SmartScreen appears: More info → Run anyway.</li></ol></details>
+        <details><summary>🐧 Linux</summary><p><b>Any distro:</b> download the <code>.AppImage</code>, then <code>chmod +x V-Me-*.AppImage</code> and run it.<br><b>Ubuntu/Debian:</b> <code>sudo apt install ./V-Me-*.deb</code><br><b>Fedora:</b> <code>sudo dnf install ./V-Me-*.rpm</code><br><b>Arch:</b> <code>sudo pacman -U V-Me-*.pacman</code></p></details>
+        <details><summary>🍎 macOS</summary><ol><li>Download the <code>.dmg</code> and drag V-Me to Applications.</li><li>The first time, right-click V-Me → Open → Open.</li></ol></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="notes">
+    <div class="wrap">
+      <h2>What's new</h2>
+      <div class="notes" id="notes-body">Loading the release notes…</div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>🔥 V-Me</span><a href="https://github.com/gee-highness/v-me-releases/releases">All versions</a><span style="margin-left:auto">3D models and skies: Poly Haven (CC0)</span></div></footer>
+
+<script>
+(() => {
+  // downloads come from a public releases-only repository (the source code stays private)
+  const REPO = 'gee-highness/v-me-releases';
+  const RELEASES = `https://github.com/${REPO}/releases`;
+
+  // ── theme (dark / light; remembers the choice) ──
+  const root = document.documentElement, btn = document.getElementById('theme');
+  const sysLight = () => matchMedia('(prefers-color-scheme: light)').matches;
+  let saved = null;
+  try { saved = localStorage.getItem('vme-site-theme'); } catch {}
+  const apply = (t) => { if (t) root.dataset.theme = t; else delete root.dataset.theme; const light = t ? t === 'light' : sysLight(); btn.textContent = light ? '🌙' : '☀️'; btn.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode'); };
+  apply(saved);
+  btn.addEventListener('click', () => { const light = root.dataset.theme ? root.dataset.theme === 'light' : sysLight(); const t = light ? 'dark' : 'light'; try { localStorage.setItem('vme-site-theme', t); } catch {} apply(t); });
+
+  // ── embers ──
+  const em = document.getElementById('embers');
+  for (let i = 0; i < 18; i++) { const e = document.createElement('i'); e.style.left = `${(i * 37) % 100}%`; e.style.animationDelay = `${(i * 0.61) % 8}s`; e.style.animationDuration = `${6 + (i * 7) % 5}s`; em.appendChild(e); }
+
+  // ── which system is this? ──
+  const ua = navigator.userAgent, plat = (navigator.userAgentData?.platform || navigator.platform || '').toLowerCase();
+  const os = /android/i.test(ua) ? 'android' : /iphone|ipad|ipod/i.test(ua) ? 'ios' : /win/.test(plat) || /windows/i.test(ua) ? 'windows'
+    : /mac/.test(plat) || /mac os/i.test(ua) ? 'mac' : /linux|x11/.test(plat) || /linux/i.test(ua) ? 'linux' : 'other';
+
+  const PLATFORMS = [
+    { id: 'android', icon: '🤖', name: 'Android', note: 'Phones and tablets, Android 7 or newer.', match: [[/\.apk$/i, 'APK', 'Tap to install']] },
+    { id: 'windows', icon: '🪟', name: 'Windows', note: 'Windows 10 and 11, 64-bit.', match: [[/setup\.exe$/i, 'Installer', 'Recommended'], [/portable\.exe$/i, 'Portable', 'No install needed'], [/win.*\.zip$/i, 'Zip', 'Unzip and run V-Me.exe']] },
+    { id: 'linux', icon: '🐧', name: 'Linux', note: '64-bit. The AppImage runs on any distro.', match: [[/\.AppImage$/i, 'AppImage', 'Any distro'], [/\.deb$/i, '.deb', 'Ubuntu, Debian, Mint'], [/\.rpm$/i, '.rpm', 'Fedora, openSUSE'], [/\.pacman$/i, '.pacman', 'Arch, Manjaro']] },
+    { id: 'mac', icon: '🍎', name: 'macOS', note: 'Apple silicon and Intel.', match: [[/\.dmg$/i, '.dmg', 'Drag to Applications'], [/mac.*\.zip$/i, '.zip', 'Unzip and open']] },
+  ];
+  const size = (b) => b > 1e9 ? `${(b / 1e9).toFixed(1)} GB` : `${Math.round(b / 1e6)} MB`;
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const render = (rel) => {
+    const assets = rel?.assets ?? [];
+    const box = document.getElementById('platforms');
+    box.innerHTML = '';
+    let best = null;
+    for (const p of PLATFORMS) {
+      const files = [];
+      for (const [re, label, hint] of p.match) for (const a of assets) if (re.test(a.name)) files.push({ a, label, hint });
+      const card = document.createElement('div');
+      card.className = 'plat' + (p.id === os ? ' mine' : '');
+      card.innerHTML = `<h3><span aria-hidden="true">${p.icon}</span>${p.name}${p.id === os ? '<span class="tag">Your device</span>' : ''}</h3><div class="note">${p.note}</div>` +
+        (files.length ? files.map((f) => `<a class="file" href="${esc(f.a.browser_download_url)}" download><span aria-hidden="true">⬇</span><span><b>${esc(f.label)}</b><br><span>${esc(f.hint)} · ${size(f.a.size)}</span></span><span class="dl" aria-hidden="true">›</span></a>`).join('')
+          : `<div class="soon">${rel ? 'Not in this release yet. ' : ''}<a href="${RELEASES}">See all versions</a></div>`);
+      if (p.id === os) box.prepend(card); else box.appendChild(card);
+      if (p.id === os && files.length) best = { p, f: files[0] };
+    }
+    const cta = document.getElementById('cta'), lab = document.getElementById('cta-label'), sub = document.getElementById('cta-sub'), ico = document.getElementById('cta-ico');
+    if (best) {
+      cta.href = best.f.a.browser_download_url;
+      cta.setAttribute('download', '');
+      lab.textContent = `Download for ${best.p.name}`;
+      sub.textContent = `${rel.tag_name} · ${best.f.label} · ${size(best.f.a.size)} · Free`;
+      ico.textContent = best.p.icon;
+    } else if (os === 'ios') {
+      sub.textContent = 'iPhone and iPad are not supported yet. Get it on a computer or Android.';
+    }
+    document.getElementById('ver').textContent = rel
+      ? `Version ${rel.tag_name.replace(/^v/, '')} · released ${new Date(rel.published_at).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}`
+      : 'Could not reach GitHub just now. The files are on the releases page.';
+    if (!rel) document.getElementById('ver').insertAdjacentHTML('beforeend', ` <a href="${RELEASES}/latest">Open releases</a>`);
+  };
+
+  // release notes: a tiny, safe Markdown subset (headings, bold, lists, tables skipped)
+  const notes = (md) => {
+    const out = [];
+    let list = false;
+    for (const raw of (md || '').split(/\r?\n/)) {
+      const line = raw.trim();
+      if (/^\|/.test(line)) continue;
+      const inline = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`(.+?)`/g, '<code>$1</code>');
+      if (/^[-*] /.test(line)) { if (!list) { out.push('<ul>'); list = true; } out.push(`<li>${inline(line.slice(2))}</li>`); continue; }
+      if (list) { out.push('</ul>'); list = false; }
+      if (/^#+ /.test(line)) out.push(`<h4>${inline(line.replace(/^#+ /, ''))}</h4>`);
+      else if (/^\*\*.+\*\*$/.test(line)) out.push(`<h4>${inline(line.replace(/^\*\*|\*\*$/g, ''))}</h4>`);
+      else if (line) out.push(`<p>${inline(line)}</p>`);
+    }
+    if (list) out.push('</ul>');
+    return out.join('');
+  };
+
+  render(null);
+  fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accept: 'application/vnd.github+json' } })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((rel) => { render(rel); document.getElementById('notes-body').innerHTML = notes(rel.body) || `<a href="${esc(rel.html_url)}">Read the notes on GitHub</a>`; })
+    .catch(() => { document.getElementById('notes-body').innerHTML = `<a href="${RELEASES}">Read the release notes on GitHub</a>`; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# Publishes a release from an upload branch: files arrive split into parts under upload/ (git cannot hold files over 100 MB),
+# then a final push adds upload/READY. The parts are joined, checked against SHA256SUMS.txt, attached to the release,
+# and the upload branch is deleted.
+name: Publish release
+on:
+  push:
+    branches: ['upload/**']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ready?
+        id: ready
+        run: echo "ok=$([ -f upload/READY ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+      - name: Join the parts and check them
+        if: steps.ready.outputs.ok == 'yes'
+        run: |
+          set -euo pipefail
+          echo "VERSION=$(cat upload/VERSION)" >> "$GITHUB_ENV"
+          mkdir out
+          for first in upload/*.part000; do
+            name=$(basename "${first%.part000}")
+            cat upload/"$name".part* > "out/$name"
+          done
+          cp upload/SHA256SUMS.txt out/
+          (cd out && sha256sum -c SHA256SUMS.txt)
+          ls -la out
+      - uses: softprops/action-gh-release@v2
+        if: steps.ready.outputs.ok == 'yes'
+        with:
+          tag_name: v${{ env.VERSION }}
+          target_commitish: main
+          name: V-Me ${{ env.VERSION }}
+          body_path: upload/NOTES.md
+          make_latest: 'true'
+          fail_on_unmatched_files: true
+          files: out/*
+      - name: Remove the upload branch
+        if: steps.ready.outputs.ok == 'yes'
+        run: git push origin --delete "$GITHUB_REF_NAME"
